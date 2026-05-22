@@ -123,6 +123,28 @@ The best-driver selection currently loads eligible drivers and sorts them in PHP
 
 The Vue frontend is intentionally simple. It does not use a global store because the current state is page-level and fits cleanly inside composables.
 
+## Large Driver Dataset Considerations
+
+The current driver selection approach is correct and easy to understand, but it is optimized for a small-to-medium number of available drivers.
+
+At the moment, eligible drivers are loaded, distance is calculated for each driver, and the candidates are sorted in PHP. If the number of available drivers becomes very large, this can create several issues:
+
+- higher memory usage because many Eloquent models are loaded at once
+- slower assignment requests because distance calculation and sorting happen in application memory
+- longer database transactions because the order lock is held while the candidate list is prepared and tested
+- more lock contention under concurrent assignment requests
+
+The transaction and `lockForUpdate` usage still protect correctness, so the main risk is performance and throughput rather than duplicate assignment.
+
+For a production-scale driver pool, the candidate selection should move closer to the database. Possible improvements include:
+
+- adding indexes for driver status and active order lookups
+- limiting candidates before sorting, for example by using a geographic bounding box around the pickup location
+- returning only the nearest N candidates instead of loading all available drivers
+- using PostgreSQL geospatial features or PostGIS for distance-based querying
+- keeping the transaction as short as possible by reducing work done after locks are acquired
+
+This would preserve the same assignment behavior while making the system more scalable for a large fleet.
 
 ## Final Review Notes
 
