@@ -21,21 +21,25 @@ class DatabaseSeeder extends Seeder
         Driver::factory()
             ->count(8)
             ->sequence(
-                ['name' => 'Cairo Driver 1', 'latitude' => 30.0444, 'longitude' => 31.2357],
-                ['name' => 'Giza Driver 1', 'latitude' => 30.0131, 'longitude' => 31.2089],
-                ['name' => 'Nasr City Driver 1', 'latitude' => 30.0561, 'longitude' => 31.3300],
-                ['name' => 'Maadi Driver 1', 'latitude' => 29.9602, 'longitude' => 31.2569],
+                ['name' => 'Ahmed Hassan', 'latitude' => 30.0444, 'longitude' => 31.2357],
+                ['name' => 'Mohamed Ali', 'latitude' => 30.0131, 'longitude' => 31.2089],
+                ['name' => 'Omar Farouk', 'latitude' => 30.0561, 'longitude' => 31.3300],
+                ['name' => 'Youssef Ibrahim', 'latitude' => 29.9602, 'longitude' => 31.2569],
+                ['name' => 'Karim Mahmoud', 'latitude' => 30.0900, 'longitude' => 31.3200],
+                ['name' => 'Tarek Nabil', 'latitude' => 30.0626, 'longitude' => 31.2197],
+                ['name' => 'Hossam Adel', 'latitude' => 30.0380, 'longitude' => 31.2100],
+                ['name' => 'Mahmoud Saeed', 'latitude' => 30.0680, 'longitude' => 31.2450],
             )
             ->create();
 
         Driver::factory()->busy()->create([
-            'name' => 'Busy Driver',
+            'name' => 'Ibrahim Yassin',
             'latitude' => 30.0500,
             'longitude' => 31.2400,
         ]);
 
         Driver::factory()->offline()->create([
-            'name' => 'Offline Driver',
+            'name' => 'Khalid Mansour',
             'latitude' => 30.0600,
             'longitude' => 31.2500,
         ]);

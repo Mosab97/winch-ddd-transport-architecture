@@ -39,9 +39,33 @@ Set `DB_HOST=127.0.0.1` and your local PostgreSQL credentials in `.env` before m
 ./vendor/bin/sail artisan test
 ```
 
+## Frontend
+
+The WINCH interface is a Vue 3 single-page app built with the Composition API. It uses Vue Router for `/orders`, `/drivers`, and `/drivers/:driverId/orders`, and communicates with Laravel through the `/api/*` endpoints.
+
+Install frontend dependencies:
+
+```bash
+npm install
+```
+
+Run the frontend locally with Vite:
+
+```bash
+npm run dev
+```
+
+Build production assets:
+
+```bash
+npm run build
+```
+
 ## API Endpoints
 
 ```http
+GET /api/orders?status=pending&page=1
 POST /api/orders/{id}/assign
+GET /api/drivers?page=1
 GET /api/drivers/{id}/orders?status=assigned&page=1
 ```
