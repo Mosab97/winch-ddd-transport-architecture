@@ -2,12 +2,13 @@
 
 namespace Src\Presentation\Api\Controllers;
 
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Src\Domain\Drivers\Actions\GetDriverOrdersAction;
 use Src\Domain\Drivers\Models\Entities\Driver;
 use Src\Presentation\Api\Requests\DriverOrdersRequest;
 use Src\Presentation\Api\Resources\OrderResource;
+use Src\Presentation\Api\Responses\ApiResponse;
 
 class DriverOrdersController extends Controller
 {
@@ -15,9 +16,12 @@ class DriverOrdersController extends Controller
         DriverOrdersRequest $request,
         Driver $driver,
         GetDriverOrdersAction $action,
-    ): AnonymousResourceCollection {
-        return OrderResource::collection(
-            $action->execute($driver, $request->status(), $request->perPage())
+    ): JsonResponse {
+        return ApiResponse::paginated(
+            'Driver orders fetched successfully',
+            OrderResource::collection(
+                $action->execute($driver, $request->status(), $request->perPage())
+            )
         );
     }
 }

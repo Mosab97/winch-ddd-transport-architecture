@@ -33,9 +33,12 @@ class AssignOrderTest extends TestCase
         $response = $this->postJson("/api/orders/{$order->id}/assign");
 
         $response->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('message', 'Order assigned successfully')
             ->assertJsonPath('data.id', $order->id)
             ->assertJsonPath('data.status', OrderStatusEnum::Assigned->value)
-            ->assertJsonPath('data.driver_id', $nearDriver->id);
+            ->assertJsonPath('data.driver_id', $nearDriver->id)
+            ->assertJsonPath('code', 200);
 
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
@@ -62,7 +65,10 @@ class AssignOrderTest extends TestCase
         $response = $this->postJson("/api/orders/{$order->id}/assign");
 
         $response->assertStatus(409)
-            ->assertJsonPath('message', 'This order has already been assigned.');
+            ->assertJsonPath('status', 'error')
+            ->assertJsonPath('message', 'This order has already been assigned.')
+            ->assertJsonPath('data', [])
+            ->assertJsonPath('code', 409);
     }
 
     public function test_busy_and_offline_drivers_are_ignored(): void
@@ -90,7 +96,10 @@ class AssignOrderTest extends TestCase
         $response = $this->postJson("/api/orders/{$order->id}/assign");
 
         $response->assertOk()
-            ->assertJsonPath('data.driver_id', $availableDriver->id);
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('message', 'Order assigned successfully')
+            ->assertJsonPath('data.driver_id', $availableDriver->id)
+            ->assertJsonPath('code', 200);
     }
 
     public function test_driver_with_active_assigned_order_is_ignored(): void
@@ -115,7 +124,10 @@ class AssignOrderTest extends TestCase
         $response = $this->postJson("/api/orders/{$order->id}/assign");
 
         $response->assertOk()
-            ->assertJsonPath('data.driver_id', $availableDriver->id);
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('message', 'Order assigned successfully')
+            ->assertJsonPath('data.driver_id', $availableDriver->id)
+            ->assertJsonPath('code', 200);
     }
 
     public function test_returns_clean_error_when_no_driver_is_available(): void
@@ -128,7 +140,10 @@ class AssignOrderTest extends TestCase
         $response = $this->postJson("/api/orders/{$order->id}/assign");
 
         $response->assertStatus(422)
-            ->assertJsonPath('message', 'No available driver was found for this order.');
+            ->assertJsonPath('status', 'error')
+            ->assertJsonPath('message', 'No available driver was found for this order.')
+            ->assertJsonPath('data', [])
+            ->assertJsonPath('code', 422);
     }
 
     public function test_repeated_assignment_attempts_do_not_create_duplicate_assignment(): void
@@ -142,5 +157,16 @@ class AssignOrderTest extends TestCase
 
         $this->assertSame(1, Order::query()->whereKey($order->id)->whereNotNull('driver_id')->count());
         $this->assertSame(1, Driver::query()->where('status', DriverStatusEnum::Busy)->count());
+    }
+
+    public function test_missing_order_returns_structured_not_found_response(): void
+    {
+        $response = $this->postJson('/api/orders/999/assign');
+
+        $response->assertStatus(404)
+            ->assertJsonPath('status', 'error')
+            ->assertJsonPath('message', 'Resource not found')
+            ->assertJsonPath('data', [])
+            ->assertJsonPath('code', 404);
     }
 }

@@ -30,7 +30,7 @@ class FindBestAvailableDriverServiceTest extends TestCase
             'longitude' => 31.2360,
         ]);
 
-        $service = new FindBestAvailableDriverService(new DistanceCalculatorService());
+        $service = new FindBestAvailableDriverService(new DistanceCalculatorService);
 
         $this->assertTrue($nearDriver->is($service->forOrder($order)));
         $this->assertFalse($farDriver->is($service->forOrder($order)));

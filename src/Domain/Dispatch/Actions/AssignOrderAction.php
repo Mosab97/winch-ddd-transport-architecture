@@ -24,7 +24,7 @@ class AssignOrderAction
             $order = Order::query()->lockForUpdate()->findOrFail($orderId);
 
             if (! $order->isPending()) {
-                throw new OrderAlreadyAssignedException();
+                throw new OrderAlreadyAssignedException;
             }
 
             foreach ($this->bestAvailableDriver->candidatesForOrder($order) as $candidate) {
@@ -41,7 +41,7 @@ class AssignOrderAction
                 }
             }
 
-            throw new NoAvailableDriverException();
+            throw new NoAvailableDriverException;
         });
     }
 }

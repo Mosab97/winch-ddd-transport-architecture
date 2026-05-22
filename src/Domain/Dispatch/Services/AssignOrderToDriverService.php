@@ -16,11 +16,11 @@ class AssignOrderToDriverService implements AssignOrderToDriverContract
     public function assign(Order $order, Driver $driver): Order
     {
         if (! $order->isPending()) {
-            throw new OrderAlreadyAssignedException();
+            throw new OrderAlreadyAssignedException;
         }
 
         if ($driver->status !== DriverStatusEnum::Available || $driver->activeAssignedOrder()->exists()) {
-            throw new DriverUnavailableException();
+            throw new DriverUnavailableException;
         }
 
         $order->forceFill([
