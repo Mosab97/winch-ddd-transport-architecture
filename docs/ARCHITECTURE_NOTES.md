@@ -122,6 +122,8 @@ The project does not introduce a separate repository layer because Eloquent is a
 
 The best-driver selection currently loads eligible drivers and sorts them in PHP using Haversine distance. This is clear and testable for the expected dataset. For very large datasets, the next step would be database-level geospatial indexing or a dedicated routing service.
 
+Coordinates are currently passed as primitive floats because the distance logic is simple, localized, and does not yet have behavior beyond calculation input. I intentionally avoided adding a coordinate DTO or value-object layer just to fill the `DataTransferObjects` folder. If coordinate behavior grows, for example reusable validation, normalization, or richer scoring, the preferred compliant location would be `src/Domain/Dispatch/DataTransferObjects/CoordinateData.php` rather than a generic shared domain.
+
 The Vue frontend is intentionally simple. It does not use a global store because the current state is page-level and fits cleanly inside composables.
 
 The written high-load decision requested by the assignment is documented separately in `docs/HIGH_LOAD_DECISION.md`.

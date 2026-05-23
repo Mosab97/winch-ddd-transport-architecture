@@ -22,7 +22,12 @@ The application separates business behavior from HTTP presentation:
 
 Controllers are intentionally thin. They validate requests, call Actions, and return resources or response envelopes. Assignment logic lives in the domain layer.
 
-More detail is available in `docs/ARCHITECTURE_NOTES.md`. The high-load architecture decision requested by the assignment is documented in `docs/HIGH_LOAD_DECISION.md`.
+Additional notes document the architectural trade-offs and high-load decision requested by the assignment.
+
+## Additional Documentation
+
+- [Architecture Notes](docs/ARCHITECTURE_NOTES.md)
+- [High Load Decision](docs/HIGH_LOAD_DECISION.md)
 
 ## Run With Docker / Laravel Sail
 
