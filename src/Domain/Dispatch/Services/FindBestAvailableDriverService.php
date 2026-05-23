@@ -3,6 +3,7 @@
 namespace Src\Domain\Dispatch\Services;
 
 use Illuminate\Support\Collection;
+use Src\Domain\Dispatch\Contracts\DistanceCalculatorContract;
 use Src\Domain\Dispatch\Contracts\FindBestAvailableDriverContract;
 use Src\Domain\Drivers\Enums\DriverStatusEnum;
 use Src\Domain\Drivers\Models\Entities\Driver;
@@ -11,7 +12,7 @@ use Src\Domain\Orders\Models\Entities\Order;
 class FindBestAvailableDriverService implements FindBestAvailableDriverContract
 {
     public function __construct(
-        private readonly DistanceCalculatorService $distanceCalculator,
+        private readonly DistanceCalculatorContract $distanceCalculator,
     ) {}
 
     public function forOrder(Order $order): ?Driver

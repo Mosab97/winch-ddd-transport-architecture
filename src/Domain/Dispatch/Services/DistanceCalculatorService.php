@@ -2,7 +2,9 @@
 
 namespace Src\Domain\Dispatch\Services;
 
-class DistanceCalculatorService
+use Src\Domain\Dispatch\Contracts\DistanceCalculatorContract;
+
+class DistanceCalculatorService implements DistanceCalculatorContract
 {
     public function haversineKilometers(
         float $fromLatitude,

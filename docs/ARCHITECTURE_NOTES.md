@@ -53,8 +53,9 @@ Contracts are used for the dispatch services that represent important business c
 
 - finding the best available driver
 - assigning an order to a driver
+- calculating distance between coordinates
 
-The current implementation binds those contracts to local services, but the boundary makes the design easier to extend. For example, driver selection could later use an external routing service, a queue, or a more advanced scoring algorithm without changing the controller layer.
+Even small stateless domain services use contracts here to respect the assignment's domain-boundary rule. The current implementation binds those contracts to local services, but the boundary makes the design easier to extend. For example, driver selection could later use an external routing service, a queue, or a more advanced scoring algorithm without changing the controller layer.
 
 ## PostgreSQL
 
@@ -122,6 +123,8 @@ The project does not introduce a separate repository layer because Eloquent is a
 The best-driver selection currently loads eligible drivers and sorts them in PHP using Haversine distance. This is clear and testable for the expected dataset. For very large datasets, the next step would be database-level geospatial indexing or a dedicated routing service.
 
 The Vue frontend is intentionally simple. It does not use a global store because the current state is page-level and fits cleanly inside composables.
+
+The written high-load decision requested by the assignment is documented separately in `docs/HIGH_LOAD_DECISION.md`.
 
 ## Large Driver Dataset Considerations
 
